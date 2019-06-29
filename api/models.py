@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Book(models.Model):
-    title = models.CharField(unique=True, max_length=100)
+    title = models.CharField(unique=True,max_length=100)
     author = models.CharField(max_length=100)
     published_year = models.IntegerField()
     no_of_pages = models.IntegerField()

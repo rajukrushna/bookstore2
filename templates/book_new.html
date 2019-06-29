@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+
+    <div style="width:100%;max-width:336px;margin:auto;margin-top:30px;" class="text-secondary">
+        <a href="{% url 'books' %}" class="btn btn-small btn-success">Back</a>
+        <form enctype="multipart/form-data" action="" method="post">
+    <div class="text-center"><h2>New Book</h2></div>
+        {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="form-group">
+        {{ form.title.errors }}
+        <label for="{{ form.title.id_for_label }}">Title</label>
+        {{ form.title }}
+    </div>
+    <div class="form-group">
+        {{ form.author.errors }}
+        <label for="{{ form.author.id_for_label }}">Author</label>
+        {{ form.author }}
+    </div>
+    <div class="form-group">
+        {{ form.published_year.errors }}
+        <label for="{{ form.published_year.id_for_label }}">Published Year</label>
+        {{ form.published_year }}
+    </div>
+    <div class="form-group">
+        {{ form.no_of_pages.errors }}
+        <label for="{{ form.no_of_pages.id_for_label }}">No. of pages</label>
+        {{ form.no_of_pages }}
+    </div>
+    <div class="form-group">
+        {{ form.isbn.errors }}
+        <label for="{{ form.isbn.id_for_label }}">ISBN</label>
+        {{ form.isbn }}
+    </div>
+    <div class="form-group">
+        {{ form.cover.errors }}
+        <label for="{{ form.cover.id_for_label }}">Cover Image</label>
+        {{ form.cover }}
+    </div>
+    <div class="form-group">
+        {{ form.pdf.errors }}
+        <label for="{{ form.pdf.id_for_label }}">PDF</label>
+        {{ form.pdf }}
+    </div>
+    <input type="submit" value="ADD BOOK" class="btn btn-primary btn-block">
+</form>
+    </div>
+</div>
+
+
+
+{% endblock %}

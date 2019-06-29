@@ -8,4 +8,8 @@ router.register(r'books', views.BookViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('user/<int:pk>/', views.user_detail),
+    path('bookfieldsupdate/<int:pk>/', views.book_field_update),
+    path('bookcoverupdate/<int:pk>/', views.book_cover_update),
+    path('bookpdfupdate/<int:pk>/', views.book_pdf_update),
 ]

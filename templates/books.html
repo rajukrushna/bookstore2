@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+      <br />
+      <div>
+        {% if user.is_staff %}
+          <a
+          href="{% url 'book_new' %}"
+          class="btn btn-lg btn-success"
+          style="padding: 10px;border-radius: 20px;"
+          ><i class="fas fa-plus-circle" style="padding: 0 10px"></i>New Book</a
+        >
+          {% endif %}
+      </div>
+      <br />
+    <div>
+        <div style="display: inline;" >
+            {% if prev is not None %}
+            <a href="" class="btn btn-primary">Previous</a>
+            {% endif %}
+            {% if next is not None %}
+            <a href="" class="btn btn-primary">Next</a>
+            {% endif %}
+        </div>
+    </div>
+      <div class="row">
+          {% for book in books %}
+          <div class="col-6 col-md-4 border" style="padding: 20px">
+          <div
+            class="bg-dark"
+            style="position: relative;text-align: center;color:white;border-radius: 10px 10px 0 0;">
+            <img
+              src="{{ book.cover }}"
+              class="fakeimg mx-auto"
+            />
+              {% if user.is_staff %}
+              <div style="position: absolute;top: 8px;right: 16px;">
+              <a href="{% url 'book_edit' book.id %}" class="btn btn-light btn-sm" alt="edit"
+                ><i class="	fas fa-edit"></i
+              ></a>
+                  <a href="{% url 'book_delete' book.id %}" class="btn btn-danger btn-sm" alt="edit"
+                ><i class="	fas fa-trash-alt"></i
+              ></a>
+            </div>
+              {% endif %}
+          </div>
+          <div
+            class="bg-primary text-light"
+            style="padding: 10px;border-radius: 0 0 10px 10px;"
+          >
+            <h5 style="line-height: 0.8"><a href="{% url 'book_detail' book.id %}" class="text-light">{{ book.title }}</a></h5>
+            <p style="line-height: 0.5"><small>{{ book.author }}</small></p>
+            <div>
+              <a href="{{ book.pdf }}" class="btn btn-success btn-block">Download <i class='fas fa-download' style="padding: 0 10px;"></i></a>
+            </div>
+          </div>
+        </div>
+          {% endfor %}
+
+
+      </div>
+    </div>
+
+
+{% endblock %}

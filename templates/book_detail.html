@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+                <div class="row" style="padding-top:30px;">
+                        <div class="col-12 col-md-6 bg-secondary">
+                            <div style="text-align: center; padding: 20px;" >
+                                <img src="{{ book.cover }}" alt="" class="img-fluid" width="60%">
+                            </div>
+
+                        </div>
+                        <div class="col-12 col-md-6 bg-primary text-light" style="padding: 20px">
+                            <table class="detail_table">
+                                <tr>
+                                    <td><h3>Title : </h3></td>
+                                    <td><h3>{{ book.title }}</h3></td>
+                                </tr>
+                                <tr>
+                                    <td>Author : </td>
+                                    <td>{{ book.author }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ISBN : </td>
+                                    <td>{{ book.isbn }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Pages : </td>
+                                    <td>{{ book.no_of_pages }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Published in : </td>
+                                    <td>{{ book.published_year }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Download  </td>
+                                    <td><div>
+                                            <a href="{{ book.pdf }}" class="btn btn-success btn-block">Download <i class='fas fa-download' style="padding: 0 10px;"></i></a>
+                                          </div></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+        </div>
+{% endblock %}

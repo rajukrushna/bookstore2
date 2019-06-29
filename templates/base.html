@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Book Store</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+      integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+      crossorigin="anonymous"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+      .fakeimg {
+        height: 200px;
+        width: 150px;
+        background: #aaa;
+        display: block;
+      }
+
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+
+       .footer {
+          position: fixed;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'books' %}">Book Store</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarsExample07"
+          aria-controls="navbarsExample07"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        {% if user.is_authenticated %}
+          <div class="collapse navbar-collapse" id="navbarsExample07">
+          <div class="ml-auto">
+            <a href="#" class="text-light">Welcome {{ user.username }}</a>
+            <a href="{% url 'logout' %}" class="btn btn-warning">Logout</a>
+          </div>
+        </div>
+        {% else %}
+        <div class="collapse navbar-collapse" id="navbarsExample07">
+          <div class="ml-auto">
+            <a href="{% url 'login' %}" class="btn btn-success">Login</a>
+            <a href="{% url 'signup' %}" class="btn btn-dark">Sign Up</a>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </nav>
+
+        {% block content %}
+        {% endblock %}
+  <div class="footer bg-primary text-light">
+  <div class="container">
+    <p>All Rights Reserved @ BookStore</p>
+  </div>
+</div>
+  </body>
+</html>
