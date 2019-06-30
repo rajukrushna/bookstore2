@@ -8,9 +8,6 @@ from django.urls import reverse
 from django.views.generic.edit import UpdateView
 
 
-API_URL = 'http://127.0.0.1:8000'
-
-
 def signup_view(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -21,7 +18,7 @@ def signup_view(request):
                 "password1": form.cleaned_data["password1"],
                 "password2": form.cleaned_data["password2"],
             }
-            resp = requests.post(f'{API_URL}/auth/signup/', data=data)
+            resp = requests.post(f'http://{request.get_host()}/auth/signup/', data=data)
             if resp.status_code == 400:
                 resp_data = resp.json()
                 for error in resp_data:
@@ -46,7 +43,7 @@ def login_view(request):
                 "username": form.cleaned_data["username"],
                 "password": form.cleaned_data["password"]
             }
-            url = f'{API_URL}/auth/login/'
+            url = f'http://{request.get_host()}/auth/login/'
             resp = requests.post(url, data)
             response_data = resp.json()
             if resp.status_code == 400:
@@ -56,9 +53,9 @@ def login_view(request):
             request.session['key'] = response_data['key']
             request.session["username"] = data["username"]
             headers = {"Authorization": f'Token {request.session["key"]}'}
-            user = requests.get(f'{API_URL}/auth/user/', headers=headers, data={"username": data['username']})
+            user = requests.get(f'http://{request.get_host()}/auth/user/', headers=headers, data={"username": data['username']})
             user_data = user.json()
-            user = requests.get(f'{API_URL}/api/user/{user_data["pk"]}', headers=headers)
+            user = requests.get(f'http://{request.get_host()}/api/user/{user_data["pk"]}', headers=headers)
             user_data = user.json()
             request.user = User(
                 id=user_data['id'],
@@ -100,7 +97,7 @@ def book_new(request):
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
             headers = {"Authorization": f'Token {request.session["key"]}'}
-            resp = requests.post(f'{API_URL}/api/books/', headers=headers, data=request.POST, files=request.FILES)
+            resp = requests.post(f'http://{request.get_host()}/api/books/', headers=headers, data=request.POST, files=request.FILES)
             return HttpResponseRedirect(reverse('books'))
     else:
         form = BookForm()
@@ -110,7 +107,7 @@ def book_new(request):
 def book_detail(request, pk):
     authenticate_request(request)
     if request.method == 'GET':
-        resp = requests.get(f'{API_URL}/api/books/{pk}')
+        resp = requests.get(f'http://{request.get_host()}/api/books/{pk}')
         book = resp.json()
         return render(request, 'book_detail.html', {"book": book})
 
@@ -133,7 +130,7 @@ def book_edit(request, pk):
                 "published_year": form.cleaned_data['published_year'],
                 "isbn": form.cleaned_data['isbn']
             }
-            url = f'{API_URL}/api/bookfieldsupdate/{form.cleaned_data["id"]}/'
+            url = f'http://{request.get_host()}/api/bookfieldsupdate/{form.cleaned_data["id"]}/'
             resp = requests.put(url, headers=headers, data=text_data)
             if 'cover' in request.FILES:
                 cover_data = {
@@ -142,7 +139,7 @@ def book_edit(request, pk):
                 cover_file = {
                     "cover": request.FILES['cover']
                 }
-                url = f'{API_URL}/api/bookcoverupdate/{form.cleaned_data["id"]}/'
+                url = f'http://{request.get_host()}/api/bookcoverupdate/{form.cleaned_data["id"]}/'
                 resp = requests.put(url, headers=headers, data=cover_data, files=cover_file)
             if 'pdf' in request.FILES:
                 pdf_data = {
@@ -151,11 +148,11 @@ def book_edit(request, pk):
                 pdf_file = {
                     "pdf": request.FILES['pdf']
                 }
-                url = f'{API_URL}/api/bookpdfupdate/{form.cleaned_data["id"]}/'
+                url = f'http://{request.get_host()}/api/bookpdfupdate/{form.cleaned_data["id"]}/'
                 resp = requests.put(url, headers=headers, data=pdf_data, files=pdf_file)
             return HttpResponseRedirect(reverse('books'))
     else:
-        url = f'{API_URL}/api/books/{pk}'
+        url = f'http://{request.get_host()}/api/books/{pk}'
         resp = requests.get(url)
         book = resp.json()
         data = {
@@ -176,7 +173,7 @@ def book_edit(request, pk):
 def book_delete(request, pk):
     authenticate_request(request)
     if request.method == 'GET':
-        url = f'{API_URL}/api/books/{pk}'
+        url = f'http://{request.get_host()}/api/books/{pk}'
         headers = {"Authorization": f'Token {request.session["key"]}'}
         resp = requests.delete(url, headers=headers)
         return HttpResponseRedirect(reverse('books'))
@@ -186,7 +183,7 @@ def book_search(request):
     authenticate_request(request)
     if request.method == 'GET':
         query = request.GET.get('query')
-        url = f'{API_URL}/api/booksearch/?query={query}'
+        url = f'http://{request.get_host()}/api/booksearch/?query={query}'
         resp = requests.get(url)
         books = resp.json()
         if resp.status_code == 200:
@@ -210,9 +207,9 @@ def authenticate_request(request):
         return
     try:
         headers = {"Authorization": f'Token {request.session["key"]}'}
-        user = requests.get(f'{API_URL}/auth/user/', headers=headers, data={"username": request.session['username']})
+        user = requests.get(f'http://{request.get_host()}/auth/user/', headers=headers, data={"username": request.session['username']})
         user_data = user.json()
-        user = requests.get(f'{API_URL}/api/user/{user_data["pk"]}', headers=headers)
+        user = requests.get(f'http://{request.get_host()}/api/user/{user_data["pk"]}', headers=headers)
         user_data = user.json()
         request.user = User(
             id=user_data['id'],
