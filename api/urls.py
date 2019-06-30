@@ -12,4 +12,5 @@ urlpatterns = [
     path('bookfieldsupdate/<int:pk>/', views.book_field_update),
     path('bookcoverupdate/<int:pk>/', views.book_cover_update),
     path('bookpdfupdate/<int:pk>/', views.book_pdf_update),
+    path('booksearch/', views.search_books)
 ]

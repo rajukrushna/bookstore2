@@ -1,5 +1,6 @@
 from .models import Book
-from .serializers import BookSerializer, UserSerializer, BookFieldsUpdateSerializer, BookCoverUpdateSerializer, BookPdfUpdateSerializer
+from django.db.models import Q
+from .serializers import BookSerializer, UserSerializer, BookFieldsUpdateSerializer, BookCoverUpdateSerializer, BookPdfUpdateSerializer, BookSearchSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework import viewsets
@@ -8,6 +9,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from django.contrib.auth.models import User
 from rest_framework import generics, status
 from rest_framework.response import Response
+from django.http import JsonResponse
 
 
 class BookViewSet(viewsets.ModelViewSet):
@@ -88,3 +90,11 @@ def book_pdf_update(request, pk):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def search_books(request):
+    query = request.GET.get('query')
+    books = Book.objects.filter(Q(title__contains=query) | Q(author__contains=query))
+    serializer = BookSearchSerializer(books, many=True)
+    return JsonResponse(serializer.data, safe=False)
+

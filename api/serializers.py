@@ -32,3 +32,8 @@ class BookPdfUpdateSerializer(serializers.ModelSerializer):
         model = Book
         fields = ('id', 'pdf')
 
+
+class BookSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = ('id', 'title', 'author', 'published_year', 'isbn', 'no_of_pages', 'cover', 'pdf')

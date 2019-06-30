@@ -89,9 +89,6 @@ def booklist_view(request):
         prev = data['previous']
         books = data['results']
         return render(request, 'books.html', {
-            'count': count,
-            'next': next,
-            'prev': prev,
             'books': books
         })
     return HttpResponse("Bad Request")
@@ -183,6 +180,19 @@ def book_delete(request, pk):
         headers = {"Authorization": f'Token {request.session["key"]}'}
         resp = requests.delete(url, headers=headers)
         return HttpResponseRedirect(reverse('books'))
+
+
+def book_search(request):
+    authenticate_request(request)
+    if request.method == 'GET':
+        query = request.GET.get('query')
+        url = f'{API_URL}/api/booksearch/?query={query}'
+        resp = requests.get(url)
+        books = resp.json()
+        if resp.status_code == 200:
+            return render(request, 'books.html', {"books": books, "query": query})
+    else:
+        return Http404("Invalid request")
 
 
 def logout_view(request):
