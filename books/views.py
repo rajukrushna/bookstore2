@@ -22,8 +22,17 @@ def signup_view(request):
                 "password2": form.cleaned_data["password2"],
             }
             resp = requests.post(f'{API_URL}/auth/signup/', data=data)
-
+            if resp.status_code == 400:
+                resp_data = resp.json()
+                for error in resp_data:
+                    if error == 'non_field_errors':
+                        form.add_error(None, resp_data[error])
+                    else:
+                        form.add_error(error, resp_data[error])
+                return render(request, 'signup.html', {"form": form})
             return render(request, 'signup_success.html')
+        else:
+            return render(request, 'signup.html')
     else:
         form = SignUpForm()
         return render(request, 'signup.html', {"form": form})
@@ -40,6 +49,10 @@ def login_view(request):
             url = f'{API_URL}/auth/login/'
             resp = requests.post(url, data)
             response_data = resp.json()
+            if resp.status_code == 400:
+                if 'non_field_errors' in response_data:
+                    form.add_error(None, response_data['non_field_errors'])
+                return render(request, 'login.html', {"form": form})
             request.session['key'] = response_data['key']
             request.session["username"] = data["username"]
             headers = {"Authorization": f'Token {request.session["key"]}'}
