@@ -34,7 +34,11 @@
                                 <tr>
                                     <td>Download  </td>
                                     <td><div>
+                                            {% if user.is_authenticated %}
                                             <a href="{{ book.pdf }}" class="btn btn-success btn-block">Download <i class='fas fa-download' style="padding: 0 10px;"></i></a>
+                                            {% else %}
+                                            <a href="{% url 'login' %}" class="btn btn-success btn-block">Download <i class='fas fa-download' style="padding: 0 10px;"></i></a>
+                                            {% endif %}
                                           </div></td>
                                 </tr>
                             </table>
